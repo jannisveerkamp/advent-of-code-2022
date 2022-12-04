@@ -1,30 +1,28 @@
-fun solveDay04a(input: String): Int {
-    val assignments = input.split("\n")
-    return assignments.sumOf { assigment ->
-        val (first, second) = assigment.split(",")
-        val (firstStart, firstEnd) = first.split("-").map { it.toInt() }
-        val (secondStart, secondEnd) = second.split("-").map { it.toInt() }
-        val x = if ((firstEnd <= secondEnd && firstStart >= secondStart) || (firstEnd >= secondEnd && firstStart <= secondStart)) {
-            1
-        } else {
-            0
-        }
-        x
+fun solveDay04a(input: String): Int = parseData(input).sumOf { assignment ->
+    if (
+        (assignment.first.contains(assignment.second.first) && assignment.first.contains(assignment.second.last)) ||
+        (assignment.second.contains(assignment.first.first) && assignment.second.contains(assignment.first.last))
+    ) {
+        1 as Int
+    } else {
+        0 as Int
     }
 }
 
-fun solveDay04b(input: String): Int {
-    val assignments = input.split("\n")
-    return assignments.sumOf { assigment ->
-        val (first, second) = assigment.split(",")
+fun solveDay04b(input: String): Int = parseData(input).sumOf { assignment ->
+    if ((assignment.first).intersect(assignment.second).isEmpty()) {
+        0 as Int
+    } else {
+        1 as Int
+    }
+}
+
+private fun parseData(input: String): List<Pair<IntRange, IntRange>> {
+    return input.split("\n").map { assignment ->
+        val (first, second) = assignment.split(",")
         val (firstStart, firstEnd) = first.split("-").map { it.toInt() }
         val (secondStart, secondEnd) = second.split("-").map { it.toInt() }
-        val x = if((firstStart..firstEnd).intersect(secondStart..secondEnd).isEmpty()) {
-            0
-        } else {
-            1
-        }
-        x
+        firstStart..firstEnd to secondStart..secondEnd
     }
 }
 
