@@ -4,7 +4,7 @@ private data class Instruction(val count: Int, val from: Int, val to: Int)
 
 private fun parseField(input: String): List<ArrayDeque<Char>> {
     val lines = input.split("\n")
-    val columns = lines.last().split(" ").last { it.isNotBlank() }.toInt()
+    val columns = lines.last().trim().split("   ").last().toInt()
     val result = List(columns) { ArrayDeque<Char>() }
     lines.reversed().forEach { line ->
         line.chunked(4).map { it[1] }.forEachIndexed { index, char ->
