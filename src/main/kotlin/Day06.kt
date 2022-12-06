@@ -1,7 +1,5 @@
 fun solveDay06a(input: String, markerSize: Int): Int {
-    return (0..(input.length - markerSize)).first {
-        input.substring(it, it + markerSize).toSet().size == markerSize
-    } + markerSize
+    return input.indexOf(input.windowed(markerSize).first { it.toSet().size == markerSize }) + markerSize
 }
 
 fun main() {
