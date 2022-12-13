@@ -44,19 +44,16 @@ private fun comparePackets(firstPacket: Element, secondPacket: Element): Int {
 
 fun solveDay13a(input: String): Int {
     val packetPairs = input.split("\n\n")
-    var result = 0
-
-    packetPairs.forEachIndexed { index, packetPair ->
+    return packetPairs.withIndex().sumOf { (index, packetPair) ->
         val (firstPacketRaw, secondPacketRaw) = packetPair.split("\n")
         val firstPacket = parsePackets(json.parseToJsonElement(firstPacketRaw))
         val secondPacket = parsePackets(json.parseToJsonElement(secondPacketRaw))
-        val innerResult = comparePackets(firstPacket, secondPacket)
-        if (innerResult != -1) {
-            result += index + 1
+        if (comparePackets(firstPacket, secondPacket) != -1) {
+            index + 1
+        } else {
+            0
         }
-
     }
-    return result
 }
 
 fun solveDay13b(input: String): Int {
