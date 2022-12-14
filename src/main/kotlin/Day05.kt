@@ -1,6 +1,6 @@
 private val regex = "move (\\d+) from (\\d+) to (\\d+)".toRegex()
 
-private data class Instruction(val count: Int, val from: Int, val to: Int)
+private data class MoveInstruction(val count: Int, val from: Int, val to: Int)
 
 private fun parseField(input: String): List<ArrayDeque<Char>> {
     val lines = input.split("\n")
@@ -18,7 +18,7 @@ private fun parseField(input: String): List<ArrayDeque<Char>> {
 
 private fun parseInstructions(instructionsList: String) = instructionsList.split("\n").map { instruction ->
     val (count, from, to) = regex.find(instruction)!!.destructured
-    Instruction(count.toInt(), from.toInt(), to.toInt())
+    MoveInstruction(count.toInt(), from.toInt(), to.toInt())
 }
 
 fun solveDay05(input: String, reversed: Boolean): String {
