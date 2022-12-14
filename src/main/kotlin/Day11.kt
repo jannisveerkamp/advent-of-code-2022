@@ -13,7 +13,7 @@ private sealed interface Operation {
     }
 }
 
-private data class Test(val mod: Long, val ifTrue: Int, val ifFalse: Int) {
+private data class TestDivisible(val mod: Long, val ifTrue: Int, val ifFalse: Int) {
     fun calcMod(oldItem: Long) = if (oldItem % mod == 0L) ifTrue else ifFalse
 }
 
@@ -21,7 +21,7 @@ private data class Monkey(
     val number: Int,
     val items: MutableList<Long>,
     val operation: Operation,
-    val test: Test,
+    val testDivisible: TestDivisible,
     var inspectedItems: Long = 0
 )
 
@@ -44,37 +44,24 @@ private fun parseMonkeys(input: String): List<Monkey> = input.split("\n\n").map 
         number = number,
         items = startingItems.toMutableList(),
         operation = parsedOperation,
-        test = Test(divisibleBy, ifTrueMonkey, ifFalseMonkey)
+        testDivisible = TestDivisible(divisibleBy, ifTrueMonkey, ifFalseMonkey)
     )
 }
 
-fun solveDay11a(input: String, repeat: Int): Long {
+fun solveDay11(input: String, repeat: Int, isA: Boolean): Long {
     val monkeys = parseMonkeys(input)
+    val mod = monkeys.map { it.testDivisible.mod }.fold(1, Long::times)
 
     repeat(repeat) {
         monkeys.forEach { monkey ->
             while (monkey.items.isNotEmpty()) {
                 val item = monkey.items.removeFirst()
-                val observedItem = monkey.operation.calc(item) / 3
-                val newMonkey = monkey.test.calcMod(observedItem)
-                monkeys[newMonkey].items.add(observedItem)
-                monkey.inspectedItems += 1
-            }
-        }
-    }
-    return monkeys.map { it.inspectedItems }.sortedBy { it }.takeLast(2).fold(1, Long::times)
-}
-
-fun solveDay11b(input: String, repeat: Int): Long {
-    val monkeys = parseMonkeys(input)
-    val mod = monkeys.map { it.test.mod }.fold(1, Long::times)
-
-    repeat(repeat) {
-        monkeys.forEach { monkey ->
-            while (monkey.items.isNotEmpty()) {
-                val item = monkey.items.removeFirst()
-                val observedItem = monkey.operation.calc(item) % mod
-                val newMonkey = monkey.test.calcMod(observedItem)
+                val observedItem = if (isA) {
+                    monkey.operation.calc(item) / 3
+                } else {
+                    monkey.operation.calc(item) % mod
+                }
+                val newMonkey = monkey.testDivisible.calcMod(observedItem)
                 monkeys[newMonkey].items.add(observedItem)
                 monkey.inspectedItems += 1
             }
@@ -87,9 +74,9 @@ fun main() {
     val inputExample = readFile("day11_example.txt")
     val inputTask = readFile("day11.txt")
 
-    println("Solution for task 1 example: ${solveDay11a(inputExample, 20)}") // 10605
-    println("Solution for task 1 task:    ${solveDay11a(inputTask, 20)}") // 56120
-    println("Solution for task 2 example: ${solveDay11b(inputExample, 10000)}") // 2713310158
-    println("Solution for task 2 task:    ${solveDay11b(inputTask, 10000)}") // 24389045529
+    println("Solution for task 1 example: ${solveDay11(inputExample, 20, true)}") // 10605
+    println("Solution for task 1 task:    ${solveDay11(inputTask, 20, true)}") // 56120
+    println("Solution for task 2 example: ${solveDay11(inputExample, 10000, false)}") // 2713310158
+    println("Solution for task 2 task:    ${solveDay11(inputTask, 10000, false)}") // 24389045529
 }
 
