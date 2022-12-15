@@ -1,5 +1,6 @@
 import kotlin.math.max
 import kotlin.math.min
+import common.Point
 
 private fun debug(array: Array<Array<Char>>, minX: Int, maxX: Int, minY: Int, maxY: Int) {
     val slicedArray = array.sliceArray(IntRange(minY - 1, maxY + 3)).map {
@@ -12,11 +13,9 @@ private const val AIR = '.'
 private const val ROCK = '#'
 private const val SAND = 'o'
 
-private data class Point(val x: Int, val y: Int) {
-    fun moveDown(): Point = Point(x, y + 1)
-    fun moveDownLeft(): Point = Point(x - 1, y + 1)
-    fun moveDownRight(): Point = Point(x + 1, y + 1)
-}
+private fun Point.moveDown(): Point = Point(x, y + 1)
+private fun Point.moveDownLeft(): Point = Point(x - 1, y + 1)
+private fun Point.moveDownRight(): Point = Point(x + 1, y + 1)
 
 private data class Grid(val grid: Array<Array<Char>>, var minX: Int, var maxX: Int, var minY: Int, var maxY: Int)
 
