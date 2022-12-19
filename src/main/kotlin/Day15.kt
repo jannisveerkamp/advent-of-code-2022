@@ -58,7 +58,7 @@ fun solveDay15b(input: String, max: Int): Long {
     val sensors = mutableMapOf<Point, Point>()
 
     input.split("\n").map { line ->
-        val (xS, yS, xB, yB) = line.replace("[^-?0-9]+".toRegex(), " ").trim().split(" ").map { it.toInt() }
+        val (xS, yS, xB, yB) = parseNumbers(line)
         sensors[Point(xS, yS)] = Point(xB, yB)
     }
 
